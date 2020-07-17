@@ -1,5 +1,9 @@
 def label = "worker-${UUID.randomUUID().toString()}"
-
+def notifySlack(STATUS, COLOR) {
+										slackSend channel: '#jenkins-alarm-test06 ', message: STATUS+" : " +
+										"${env.JOB_NAME}[${env.BUILD_NUMBER}] (${env.BUILD_URL})", color: COLOR,
+										tokenCredentialId: 'slack-lab06 ', teamDomain: 'ibm-teck'
+										}
 // Slack 알림
 
 podTemplate(label: label, containers: [
@@ -35,11 +39,7 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
 		def sonarQubeProject = props["sonarQubeProject"]
 		// 재배포를 위한 tag를 재정의
 		def timeStamp = System.currentTimeMillis()
-		def notifySlack(STATUS, COLOR) {
-										slackSend channel: '#jenkins-alarm-test06 ', message: STATUS+" : " +
-										"${env.JOB_NAME}[${env.BUILD_NUMBER}] (${env.BUILD_URL})", color: COLOR,
-										tokenCredentialId: 'slack-lab06 ', teamDomain: 'ibm-teck'
-										}
+	
 		echo "TimeStamp: ${timeStamp}"
 		tag = tag+"-"+timeStamp
 
