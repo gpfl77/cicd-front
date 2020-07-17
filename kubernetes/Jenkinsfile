@@ -68,15 +68,15 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
 						sh "docker push ${image}:${tag}"
 						sh "docker tag ${image}:${tag} ${image}:latest"
 						sh "docker push ${image}:latest"
-				}
-				}
-				}
+												}
+									}
+								  }
 		// #6 배포 Stage
 		stage('Deploy') {
-container('kubectl') {
-sh "kubectl apply -n ${namespace} -f ${deployment}"
-sh "kubectl apply -n ${namespace} -f ${service}"
-sh "kubectl get svc -n ${namespace}"
+				container('kubectl') {
+				sh "kubectl apply -n ${namespace} -f ${deployment}"
+				sh "kubectl apply -n ${namespace} -f ${service}"
+				sh "kubectl get svc -n ${namespace}"
 }
 }
 
