@@ -16,7 +16,7 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
 	// 예외처리 구문
 	try {
 		// Slack - 빌드 시작시
-
+	notifySlack("STARTED", "#0000FF")
 		// #1 Github 소스 가져오기
 		stage('Get Source') {
 		git credentialsId: 'github-lab06', url: 'https://github.com/gpfl77/cicd-front.git', branch: 'master'}
@@ -35,6 +35,11 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
 		def sonarQubeProject = props["sonarQubeProject"]
 		// 재배포를 위한 tag를 재정의
 		def timeStamp = System.currentTimeMillis()
+		def notifySlack(STATUS, COLOR) {
+										slackSend channel: '#jenkins-alarm-test06 ', message: STATUS+" : " +
+										"${env.JOB_NAME}[${env.BUILD_NUMBER}] (${env.BUILD_URL})", color: COLOR,
+										tokenCredentialId: 'slack-lab06 ', teamDomain: 'ibm-teck'
+										}
 		echo "TimeStamp: ${timeStamp}"
 		tag = tag+"-"+timeStamp
 
@@ -74,11 +79,11 @@ sh "kubectl get svc -n ${namespace}"
 }
 
 		// Slack - 빌드 성공시
-
-
+		
+notifySlack("SUCCESS", "#00FF00")
 	} catch(e) {
 		// Slack - 빌드 실패시
-
+		notifySlack("FAILED", "#FF0000")
 	}
   }
 }
