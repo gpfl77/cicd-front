@@ -61,13 +61,13 @@ containerTemplate(name: 'kubectl', image: 'roffe/kubectl', command: 'cat', ttyEn
 			}
 			}
 		// #5 컨테이너 이미지 생성 Stage
-								stage('Dockerizing') {
+			stage('Dockerizing') {
 				container('docker') {
-				docker.withRegistry("${dockerRegistry}", "${credentialRegistry}") {
-				sh "docker build -f ./Dockerfile -t ${image}:${tag} ${WORKSPACE}"
-				sh "docker push ${image}:${tag}"
-				sh "docker tag ${image}:${tag} ${image}:latest"
-				sh "docker push ${image}:latest"
+						docker.withRegistry("${dockerRegistry}", "${credentialRegistry}") {
+						sh "docker build -f ./Dockerfile -t ${image}:${tag} ${WORKSPACE}"
+						sh "docker push ${image}:${tag}"
+						sh "docker tag ${image}:${tag} ${image}:latest"
+						sh "docker push ${image}:latest"
 				}
 				}
 				}
